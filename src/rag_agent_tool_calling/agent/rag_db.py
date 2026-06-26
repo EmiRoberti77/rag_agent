@@ -31,4 +31,8 @@ class RagDB(RagBase):
         print(f'query:results:{len(final_resuls)}')
         return final_resuls
 
+    @property
+    def retriever(self):
+        return self._db.as_retriever(search_kwargs={"k":2})
+
 
