@@ -10,4 +10,5 @@ class GraphResult:
 
 
 def run_brain_graph(question: str) -> GraphResult:
+    print('in run_brain_graph')
     raise NotImplementedError("Phase 3: LangGraph retrieve → generate")

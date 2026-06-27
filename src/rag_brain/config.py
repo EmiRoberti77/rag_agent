@@ -24,8 +24,8 @@ def required_keys() -> None:
     
     os.environ['OPENAI_API_KEY'] = openai_api_key
 
-    langsmith_api_key = os.getenv('LANGSMITH_PROJECT')
+    langsmith_api_key = os.getenv('LANGSMITH_API_KEY')
     if not langsmith_api_key:  
-        raise ValueError('LANGCHAIN_API_KEY is required')
+        raise ValueError('LANGSMITH_API_KEY is required')
     
-    os.environ['OPENAI_API_KEY'] = langsmith_api_key
+    os.environ['LANGSMITH_API_KEY'] = langsmith_api_key

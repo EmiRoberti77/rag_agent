@@ -11,10 +11,12 @@ class AskResponse(BaseModel):
 
 
 class IngestResponse(BaseModel):
-    files_processed: int
-    chunks_added: int
+    filename: str
+    saved_path:str
+    bytes_written:int
     message: str
-
+    title: str = Field(description='document title')
+    ts: str = Field(description='ingestion timestamp in ISO')
 
 class HealthResponse(BaseModel):
     status: str

@@ -17,5 +17,7 @@ class BrainService:
         )
 
     def ask(self, question: str) -> AskResponse:
+        print('in ask')
         result = run_brain_graph(question)
+        print(result)
         return AskResponse(answer=result.answer, sources=result.sources)
