@@ -2,6 +2,8 @@ import shutil
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from datetime import datetime
 from pathlib import Path
+
+from langchain_core.documents import Document
 from ..config import NOTES_DIR
 
 from rag_brain.api.schemas import AskRequest, AskResponse, HealthResponse, IngestResponse
@@ -40,20 +42,19 @@ async def ingest(
                 status_code=400,
                 detail='incorrect file type, must be a PDF/TXT/MD file'
             )
-
-
         # create new file in upload destination and copy the bytes into it
         destination = UPLOAD_PATH / file.filename
         with destination.open('wb') as buffer:
             shutil.copyfileobj(file.file, buffer)
 
-        print('FILE INFO')
-        print(file.filename)
-        print(file.size)
-        print(file.content_type)
-        print(title)
-        print('FILE SAVED')
+        # chunk the document 
+        ids:list[str] = get_service().ingest_document(
+            title=title,
+            file_path=str(destination.resolve()),
+            content_type=file.content_type
+        )
 
+        print(ids)
 
         return IngestResponse(
             filename=file.filename,
