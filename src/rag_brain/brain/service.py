@@ -1,12 +1,12 @@
 from rag_brain.api.schemas import AskResponse, IngestResponse
 from rag_brain.brain.graph import run_brain_graph
 from rag_brain.brain.ingest import ingest_notes_directory
-from rag_brain.config import require_openai_key
+from rag_brain.config import required_keys
 
 
 class BrainService:
     def __init__(self) -> None:
-        require_openai_key()
+        required_keys()
 
     def ingest_notes(self) -> IngestResponse:
         result = ingest_notes_directory()

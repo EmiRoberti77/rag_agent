@@ -10,7 +10,8 @@ Built as the third stage of this repo: `rag_agent_base` → `rag_agent_tool_call
 
 - Drop `.md` files into `notes/`
 - Run ingest to chunk + embed into Chroma
-- Ask questions through a FastAPI server
+- 
+
 - Answers cite source files; say "I don't know" when context is missing
 
 No Streamlit, no PDF, no hybrid search in v1. Add those in later phases.
