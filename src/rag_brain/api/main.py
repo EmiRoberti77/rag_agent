@@ -1,6 +1,8 @@
+import shutil
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from datetime import datetime
-
+from pathlib import Path
+from ..config import NOTES_DIR
 
 from rag_brain.api.schemas import AskRequest, AskResponse, HealthResponse, IngestResponse
 from rag_brain.brain.service import BrainService
@@ -12,7 +14,8 @@ app = FastAPI(
 )
 
 _service: BrainService | None = None
-
+UPLOAD_PATH = Path(NOTES_DIR)
+UPLOAD_PATH.mkdir(exist_ok=True)
 
 def get_service() -> BrainService:
     global _service
@@ -32,17 +35,25 @@ async def ingest(
     title: str = Form(..., min_length=1, max_length=200)    
 ) -> IngestResponse | HTTPException:
     try:
+        if not file.content_type in ['application/pdf', 'text/plain', 'text/markdown']:
+            raise HTTPException(
+                status_code=400,
+                detail='incorrect file type, must be a PDF/TXT/MD file'
+            )
+
+
+        # create new file in upload destination and copy the bytes into it
+        destination = UPLOAD_PATH / file.filename
+        with destination.open('wb') as buffer:
+            shutil.copyfileobj(file.file, buffer)
+
         print('FILE INFO')
         print(file.filename)
         print(file.size)
         print(file.content_type)
         print(title)
         print('FILE SAVED')
-        if not file.content_type in ['application/pdf', 'text/plain', 'text/markdown']:
-            raise HTTPException(
-                status_code=400,
-                detail='incorrect file type, must be a PDF/TXT/MD file'
-            )
+
 
         return IngestResponse(
             filename=file.filename,
